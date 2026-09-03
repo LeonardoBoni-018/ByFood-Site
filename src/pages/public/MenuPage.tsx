@@ -15,7 +15,13 @@ export function MenuPage() {
   const [activeCategory, setActiveCategory] = useState('Todos')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
-  const [cartOpen, setCartOpen] = useState(false)
+  const [cartOpen, setCartOpen] = useState(() => {
+    try {
+      return typeof window !== 'undefined' && window.innerWidth >= 1024
+    } catch {
+      return false
+    }
+  })
 
   useEffect(() => {
     loadMenu()

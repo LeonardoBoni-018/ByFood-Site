@@ -15,6 +15,7 @@ export interface MenuItem {
   price: number
   category: string
   available: boolean
+  imageUrl?: string
 }
 
 export interface CartItem {
@@ -65,6 +66,7 @@ export interface MenuItemRequest {
   price: number
   category: string
   available: boolean
+  imageUrl?: string
 }
 
 export interface OrderRequest {

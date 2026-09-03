@@ -20,7 +20,7 @@ export function CartSidebar({ open, onClose }: CartSidebarProps) {
   return (
     <>
       <div className="fixed inset-0 bg-black/50 z-50 lg:hidden" onClick={onClose} />
-      <div className="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-surface shadow-xl z-50 flex flex-col">
+      <div className="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-surface shadow-xl z-50 flex flex-col lg:static lg:relative lg:w-80 lg:max-w-none lg:shadow-none lg:block">
         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
           <div className="flex items-center gap-2">
             <ShoppingCart size={20} className="text-primary" />
