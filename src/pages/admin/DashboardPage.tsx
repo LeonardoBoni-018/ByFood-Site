@@ -9,8 +9,10 @@ export function DashboardPage() {
   const [orders, setOrders] = useState<Order[]>([])
   const [filter, setFilter] = useState<OrderStatus | 'ALL'>('ALL')
 
+  const load = () => fetchAdminOrders(0, 100).then((p) => setOrders(p.content)).catch(() => setOrders([]))
+
   useEffect(() => {
-    fetchAdminOrders(0, 100).then((p) => setOrders(p.content)).catch(() => setOrders([]))
+    load()
   }, [])
 
   const filtered = orders.filter((o) => (filter === 'ALL' ? true : o.status === filter))
@@ -23,7 +25,7 @@ export function DashboardPage() {
 
       <div>
         {filtered.map((o) => (
-          <OrderCard key={o.id} order={o} />
+          <OrderCard key={o.id} order={o} onUpdated={load} />
         ))}
         {filtered.length === 0 && <div className="text-center text-gray-500 py-8">Nenhum pedido encontrado</div>}
       </div>
