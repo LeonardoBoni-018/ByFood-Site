@@ -4,6 +4,7 @@ import { MenuPage } from './pages/public/MenuPage'
 import { CartPage } from './pages/public/CartPage'
 import { OrderConfirmedPage } from './pages/public/OrderConfirmedPage'
 import { OrderTrackingPage } from './pages/public/OrderTrackingPage'
+import { LoginPage } from './pages/admin/LoginPage'
 
 function Placeholder({ title }: { title: string }) {
   return <div className="p-8 text-center"><h1 className="text-2xl font-bold">{title}</h1></div>
@@ -21,7 +22,7 @@ function App() {
           <Route path="/orders" element={<Placeholder title="Meus Pedidos" />} />
           <Route path="/profile" element={<Placeholder title="Perfil" />} />
         </Route>
-        <Route path="/admin/login" element={<Placeholder title="Login Admin" />} />
+        <Route path="/admin/login" element={<LoginPage />} />
         <Route path="/admin/orders" element={<Placeholder title="Dashboard Pedidos" />} />
         <Route path="/admin/menu" element={<Placeholder title="Gerenciar Cardápio" />} />
         <Route path="/admin/menu/new" element={<Placeholder title="Novo Item" />} />
