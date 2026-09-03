@@ -1,6 +1,7 @@
 import { MoreHorizontal } from 'lucide-react'
 import type { Order, OrderStatus } from '../../types'
 import { formatPrice } from '../../lib/formatters'
+import { Modal } from '../ui/Modal'
 import { useState } from 'react'
 import { updateOrderStatus } from '../../api/orders'
 import { ORDER_STATUS_LABELS, ORDER_STATUS_COLORS } from '../../lib/constants'
@@ -14,6 +15,7 @@ const statusOrder: OrderStatus[] = ['RECEIVED', 'PREPARING', 'READY', 'DELIVERED
 
 export function OrderCard({ order, onUpdated }: OrderCardProps) {
   const [loading, setLoading] = useState(false)
+  const [confirmOpen, setConfirmOpen] = useState(false)
 
   const handleAdvance = async () => {
     const idx = statusOrder.indexOf(order.status)
@@ -67,7 +69,7 @@ export function OrderCard({ order, onUpdated }: OrderCardProps) {
         </div>
       </div>
 
-      <div className="ml-4 flex flex-col items-end gap-2">
+        <div className="ml-4 flex flex-col items-end gap-2">
         <div className="flex items-center gap-2">
           <button
             onClick={handleAdvance}
@@ -77,15 +79,42 @@ export function OrderCard({ order, onUpdated }: OrderCardProps) {
             Avançar
           </button>
           <button
-            onClick={() => handleSet('CANCELLED')}
+            onClick={() => setConfirmOpen(true)}
             disabled={loading}
             className="px-3 py-1 rounded-xl bg-danger text-white text-sm disabled:opacity-50"
           >
             Cancelar
           </button>
         </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => handleSet('READY')}
+            disabled={loading || order.status === 'READY' || order.status === 'DELIVERED'}
+            className="px-3 py-1 rounded-xl bg-info text-white text-sm disabled:opacity-50"
+          >
+            Marcar Pronto
+          </button>
+          <button
+            onClick={() => handleSet('DELIVERED')}
+            disabled={loading || order.status === 'DELIVERED'}
+            className="px-3 py-1 rounded-xl bg-success text-white text-sm disabled:opacity-50"
+          >
+            Entregue
+          </button>
+        </div>
+
         <button className="text-gray-500 hover:text-gray-700"><MoreHorizontal /></button>
       </div>
+
+      <Modal open={confirmOpen} onClose={() => setConfirmOpen(false)}>
+        <h3 className="text-lg font-bold mb-2">Confirmar cancelamento</h3>
+        <p className="text-sm text-gray-600 mb-4">Tem certeza que deseja cancelar o pedido #{String(order.id).padStart(4, '0')}?</p>
+        <div className="flex gap-2 justify-end">
+          <button onClick={() => setConfirmOpen(false)} className="px-3 py-2 rounded-xl bg-gray-100">Fechar</button>
+          <button onClick={async () => { await handleSet('CANCELLED'); setConfirmOpen(false) }} className="px-3 py-2 rounded-xl bg-danger text-white">Confirmar</button>
+        </div>
+      </Modal>
     </div>
   )
 }

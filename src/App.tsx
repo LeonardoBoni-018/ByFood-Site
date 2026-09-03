@@ -7,6 +7,7 @@ import { OrderTrackingPage } from './pages/public/OrderTrackingPage'
 import { LoginPage } from './pages/admin/LoginPage'
 import { AdminLayout } from './components/layout/AdminLayout'
 import { DashboardPage } from './pages/admin/DashboardPage'
+import { MenuManagementPage } from './pages/admin/MenuManagementPage'
 
 function Placeholder({ title }: { title: string }) {
   return <div className="p-8 text-center"><h1 className="text-2xl font-bold">{title}</h1></div>
@@ -27,7 +28,7 @@ function App() {
         <Route path="/admin/login" element={<LoginPage />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="orders" element={<DashboardPage />} />
-          <Route path="menu" element={<Placeholder title="Gerenciar Cardápio" />} />
+          <Route path="menu" element={<MenuManagementPage />} />
           <Route path="menu/new" element={<Placeholder title="Novo Item" />} />
           <Route path="menu/:id/edit" element={<Placeholder title="Editar Item" />} />
         </Route>
