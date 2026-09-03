@@ -5,6 +5,8 @@ import { CartPage } from './pages/public/CartPage'
 import { OrderConfirmedPage } from './pages/public/OrderConfirmedPage'
 import { OrderTrackingPage } from './pages/public/OrderTrackingPage'
 import { LoginPage } from './pages/admin/LoginPage'
+import { AdminLayout } from './components/layout/AdminLayout'
+import { DashboardPage } from './pages/admin/DashboardPage'
 
 function Placeholder({ title }: { title: string }) {
   return <div className="p-8 text-center"><h1 className="text-2xl font-bold">{title}</h1></div>
@@ -23,10 +25,12 @@ function App() {
           <Route path="/profile" element={<Placeholder title="Perfil" />} />
         </Route>
         <Route path="/admin/login" element={<LoginPage />} />
-        <Route path="/admin/orders" element={<Placeholder title="Dashboard Pedidos" />} />
-        <Route path="/admin/menu" element={<Placeholder title="Gerenciar Cardápio" />} />
-        <Route path="/admin/menu/new" element={<Placeholder title="Novo Item" />} />
-        <Route path="/admin/menu/:id/edit" element={<Placeholder title="Editar Item" />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="orders" element={<DashboardPage />} />
+          <Route path="menu" element={<Placeholder title="Gerenciar Cardápio" />} />
+          <Route path="menu/new" element={<Placeholder title="Novo Item" />} />
+          <Route path="menu/:id/edit" element={<Placeholder title="Editar Item" />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )
