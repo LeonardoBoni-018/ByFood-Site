@@ -8,6 +8,7 @@ import { LoginPage } from './pages/admin/LoginPage'
 import { AdminLayout } from './components/layout/AdminLayout'
 import { DashboardPage } from './pages/admin/DashboardPage'
 import { MenuManagementPage } from './pages/admin/MenuManagementPage'
+import { MenuItemFormPage } from './pages/admin/MenuItemFormPage'
 
 function Placeholder({ title }: { title: string }) {
   return <div className="p-8 text-center"><h1 className="text-2xl font-bold">{title}</h1></div>
@@ -29,8 +30,8 @@ function App() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="orders" element={<DashboardPage />} />
           <Route path="menu" element={<MenuManagementPage />} />
-          <Route path="menu/new" element={<Placeholder title="Novo Item" />} />
-          <Route path="menu/:id/edit" element={<Placeholder title="Editar Item" />} />
+          <Route path="menu/new" element={<MenuItemFormPage />} />
+          <Route path="menu/:id/edit" element={<MenuItemFormPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
