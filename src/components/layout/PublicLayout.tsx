@@ -12,7 +12,7 @@ export function PublicLayout() {
   }, [fetchRestaurant])
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0F172A]">
       <TopBar />
       <main className="pb-20 md:pb-4">
         <Outlet />
