@@ -2,8 +2,13 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Eye, EyeOff } from 'lucide-react'
 import { useAuthStore } from '../../stores/authStore'
+import { getErrorMessage } from '../../lib/errors'
 import { Input } from '../ui/Input'
 import { Button } from '../ui/Button'
+
+function axiosStatus(err: unknown): number | undefined {
+  return (err as { response?: { status?: number } })?.response?.status
+}
 
 export function AdminLoginForm() {
   const navigate = useNavigate()
@@ -23,7 +28,7 @@ export function AdminLoginForm() {
       await login(username, password)
       navigate('/admin/orders')
     } catch (err) {
-      setError('Credenciais inválidas')
+      setError(axiosStatus(err) === 401 ? 'Credenciais inválidas' : getErrorMessage(err))
     } finally {
       setLoading(false)
     }

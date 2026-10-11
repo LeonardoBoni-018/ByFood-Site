@@ -1,3 +1,5 @@
+import { toast } from 'sonner'
+import { getErrorMessage } from '../../lib/errors'
 import { MoreHorizontal } from 'lucide-react'
 import type { Order, OrderStatus } from '../../types'
 import { formatPrice } from '../../lib/formatters'
@@ -26,7 +28,7 @@ export function OrderCard({ order, onUpdated }: OrderCardProps) {
       await updateOrderStatus(order.id, next)
       onUpdated?.()
     } catch (err) {
-      // ignore for now
+      toast.error(getErrorMessage(err))
     } finally {
       setLoading(false)
     }
@@ -37,8 +39,9 @@ export function OrderCard({ order, onUpdated }: OrderCardProps) {
     try {
       await updateOrderStatus(order.id, s)
       onUpdated?.()
-    } catch {}
-    finally { setLoading(false) }
+    } catch (err) {
+      toast.error(getErrorMessage(err))
+    } finally { setLoading(false) }
   }
 
   return (

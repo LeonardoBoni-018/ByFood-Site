@@ -12,7 +12,6 @@ export function MenuItemFormPage() {
 
   useEffect(() => {
     if (!id) return
-    setLoading(true)
     fetchAdminMenu(0, 200).then((p) => {
       const found = p.content.find((i) => String(i.id) === id)
       if (found) setInitial(found)

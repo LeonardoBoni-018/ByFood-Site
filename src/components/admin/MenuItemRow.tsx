@@ -1,3 +1,5 @@
+import { toast } from 'sonner'
+import { getErrorMessage } from '../../lib/errors'
 import { Edit, Trash } from 'lucide-react'
 import type { MenuItem } from '../../types'
 import { formatPrice } from '../../lib/formatters'
@@ -24,8 +26,9 @@ export function MenuItemRow({ item, onUpdated }: MenuItemRowProps) {
         imageUrl: item.imageUrl,
       })
       onUpdated?.()
-    } catch {}
-    finally { setLoading(false) }
+    } catch (err) {
+      toast.error(getErrorMessage(err))
+    } finally { setLoading(false) }
   }
 
   const handleDelete = async () => {
@@ -34,8 +37,9 @@ export function MenuItemRow({ item, onUpdated }: MenuItemRowProps) {
     try {
       await deleteMenuItem(item.id)
       onUpdated?.()
-    } catch {}
-    finally { setLoading(false) }
+    } catch (err) {
+      toast.error(getErrorMessage(err))
+    } finally { setLoading(false) }
   }
 
   return (

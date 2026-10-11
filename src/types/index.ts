@@ -25,6 +25,7 @@ export interface CartItem {
 
 export interface Order {
   id: number
+  trackingCode: string
   customerName: string
   customerPhone: string
   customerAddress: string

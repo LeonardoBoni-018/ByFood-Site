@@ -4,6 +4,7 @@ import { ArrowLeft, MessageCircle } from 'lucide-react'
 import { useCartStore } from '../../stores/cartStore'
 // import { useRestaurantStore } from '../../stores/restaurantStore'
 import { createOrder } from '../../api/orders'
+import { getErrorMessage } from '../../lib/errors'
 import { CartItem } from '../../components/cart/CartItem'
 import { Input } from '../../components/ui/Input'
 import { Button } from '../../components/ui/Button'
@@ -42,9 +43,9 @@ export function CartPage() {
         items: items.map((i) => ({ menuItemId: i.menuItem.id, quantity: i.quantity })),
       })
       clearCart()
-      navigate(`/order/${order.id}/confirmed`)
-    } catch {
-      setErrors({ submit: 'Erro ao criar pedido. Tente novamente.' })
+      navigate(`/order/${order.trackingCode}/confirmed`)
+    } catch (err) {
+      setErrors({ submit: getErrorMessage(err, 'Erro ao criar pedido. Tente novamente.') })
     } finally {
       setLoading(false)
     }

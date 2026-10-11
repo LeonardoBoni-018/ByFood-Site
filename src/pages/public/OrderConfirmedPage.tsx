@@ -1,42 +1,17 @@
-import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { CheckCircle, MessageCircle } from 'lucide-react'
-import { fetchOrder } from '../../api/orders'
-import type { Order } from '../../types'
-import { OrderStatusTimeline } from '../../components/order/OrderStatusTimeline'  
-import { Skeleton } from '../../components/ui/Skeleton'
-import { formatPrice } from '../../lib/formatters'
+import { useOrder } from '../../hooks/useOrder'
+import { OrderStatusTimeline } from '../../components/order/OrderStatusTimeline'
+import { ORDER_STATUS_LABELS } from '../../lib/constants'
+import { OrderItemsCard, CustomerCard } from '../../components/order/OrderDetails'
+import { OrderLoading, OrderUnavailable } from '../../components/order/OrderPageState'
 
 export function OrderConfirmedPage() {
-  const { id } = useParams<{ id: string }>()
-//   const navigate = useNavigate()
-  const [order, setOrder] = useState<Order | null>(null)
-  const [loading, setLoading] = useState(true)
+  const { code } = useParams<{ code: string }>()
+  const { order, loading, error, notFound, retry } = useOrder(code)
 
-  useEffect(() => {
-    if (!id) return
-    fetchOrder(Number(id))
-      .then(setOrder)
-      .finally(() => setLoading(false))
-  }, [id])
-
-  if (loading) {
-    return (
-      <div className="px-4 py-8 max-w-lg mx-auto space-y-4">
-        <Skeleton className="h-20 w-20 rounded-full mx-auto" />
-        <Skeleton className="h-8 w-48 mx-auto" />
-        <Skeleton className="h-40 w-full" />
-      </div>
-    )
-  }
-
-  if (!order) {
-    return (
-      <div className="px-4 py-8 text-center">
-        <p className="text-gray-500">Pedido não encontrado</p>
-      </div>
-    )
-  }
+  if (loading) return <OrderLoading />
+  if (!order) return <OrderUnavailable notFound={notFound} error={error} onRetry={retry} />
 
   return (
     <div className="px-4 py-8 max-w-lg mx-auto text-center">
@@ -50,34 +25,14 @@ export function OrderConfirmedPage() {
         <div className="flex items-center justify-between mb-3">
           <span className="font-bold text-lg">#{String(order.id).padStart(4, '0')}</span>
           <span className="bg-warning text-dark px-3 py-1 rounded-full text-xs font-semibold">
-            Recebido
+            {ORDER_STATUS_LABELS[order.status]}
           </span>
         </div>
         <OrderStatusTimeline status={order.status} />
       </div>
 
-      <div className="bg-surface rounded-2xl p-4 mb-4 text-left">
-        <h2 className="font-semibold text-sm text-gray-500 mb-2">Itens do Pedido</h2>
-        {order.items.map((item, i) => (
-          <div key={i} className="flex justify-between py-2 border-b border-gray-50 last:border-0">
-            <span className="text-sm">
-              {item.itemName} <span className="text-gray-400">× {item.quantity}</span>
-            </span>
-            <span className="text-sm font-semibold">{formatPrice(item.unitPrice * item.quantity)}</span>
-          </div>
-        ))}
-        <div className="flex justify-between pt-2 mt-2 border-t border-gray-100">
-          <span className="font-bold">Total</span>
-          <span className="font-bold text-lg">{formatPrice(order.total)}</span>
-        </div>
-      </div>
-
-      <div className="bg-surface rounded-2xl p-4 mb-6 text-left">
-        <h2 className="font-semibold text-sm text-gray-500 mb-2">Dados do Cliente</h2>
-        <p className="text-sm">👤 {order.customerName}</p>
-        <p className="text-sm">📞 {order.customerPhone}</p>
-        <p className="text-sm">📍 {order.customerAddress}</p>
-      </div>
+      <OrderItemsCard order={order} />
+      <CustomerCard order={order} />
 
       <a
         href={order.whatsappLink}

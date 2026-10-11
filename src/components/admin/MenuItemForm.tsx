@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { getErrorMessage } from '../../lib/errors'
 import { Input } from '../ui/Input'
 import { Button } from '../ui/Button'
 import { createMenuItem, updateMenuItem } from '../../api/menu'
@@ -40,7 +41,7 @@ export function MenuItemForm({ initial = null, onSaved }: MenuItemFormProps) {
       price: Number(price),
       category,
       available,
-      imageUrl,
+      imageUrl: imageUrl?.trim() || undefined,
     }
 
     setLoading(true)
@@ -52,7 +53,7 @@ export function MenuItemForm({ initial = null, onSaved }: MenuItemFormProps) {
       }
       onSaved?.()
     } catch (err) {
-      setError('Erro ao salvar item')
+      setError(getErrorMessage(err, 'Erro ao salvar item'))
     } finally {
       setLoading(false)
     }
