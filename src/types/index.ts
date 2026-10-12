@@ -1,11 +1,35 @@
-export interface Restaurant {
+export type UserRole = 'CUSTOMER' | 'STORE'
+
+export interface User {
   id: number
   name: string
-  description: string
+  login: string
+  phone?: string | null
+  role: UserRole
+}
+
+export interface Restaurant {
+  id: number
+  slug: string
+  name: string
+  description?: string | null
+  cuisine: string
   address: string
   phone: string
   whatsappNumber: string
-  openingHours: string
+  openingHours?: string | null
+  imageUrl?: string | null
+  active: boolean
+}
+
+/** Versão enxuta devolvida pela vitrine de lojas (sem telefone/WhatsApp). */
+export interface RestaurantSummary {
+  slug: string
+  name: string
+  description?: string | null
+  cuisine: string
+  openingHours?: string | null
+  imageUrl?: string | null
 }
 
 export interface MenuItem {
@@ -26,6 +50,8 @@ export interface CartItem {
 export interface Order {
   id: number
   trackingCode: string
+  restaurantName: string
+  restaurantSlug: string
   customerName: string
   customerPhone: string
   customerAddress: string
@@ -44,12 +70,15 @@ export interface OrderItem {
 
 export type OrderStatus = 'RECEIVED' | 'PREPARING' | 'READY' | 'DELIVERED' | 'CANCELLED'
 
+/** Formato de página do Spring Data 4: os metadados ficam dentro de `page`. */
 export interface Page<T> {
   content: T[]
-  totalElements: number
-  totalPages: number
-  size: number
-  number: number
+  page: {
+    size: number
+    number: number
+    totalElements: number
+    totalPages: number
+  }
 }
 
 export interface LoginRequest {
@@ -59,6 +88,33 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   token: string
+  expiresAt: string
+  user: User
+}
+
+export interface RegisterCustomerRequest {
+  name: string
+  email: string
+  phone?: string
+  password: string
+}
+
+export interface StoreProfile {
+  name: string
+  description?: string
+  cuisine: string
+  address: string
+  phone: string
+  whatsappNumber: string
+  openingHours?: string
+  imageUrl?: string
+}
+
+export interface RegisterStoreRequest {
+  ownerName: string
+  email: string
+  password: string
+  store: StoreProfile
 }
 
 export interface MenuItemRequest {

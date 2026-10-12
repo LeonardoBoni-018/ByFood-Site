@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { AxiosError } from 'axios'
-import { getErrorMessage } from './errors'
+import { getErrorMessage, getFieldErrors } from './errors'
 
 const httpError = (status: number, data?: unknown) =>
   new AxiosError('x', 'ERR', undefined, undefined, { status, data } as never)
@@ -19,5 +19,16 @@ describe('getErrorMessage', () => {
   })
   it('usa fallback para erros desconhecidos', () => {
     expect(getErrorMessage(new Error('boom'), 'fallback')).toBe('fallback')
+  })
+})
+
+describe('getFieldErrors', () => {
+  it('devolve os erros por campo de uma validação 400', () => {
+    expect(getFieldErrors(httpError(400, { errors: { 'store.name': 'obrigatório' } })))
+      .toEqual({ 'store.name': 'obrigatório' })
+  })
+  it('ignora erros que não são validação', () => {
+    expect(getFieldErrors(httpError(409, { detail: 'duplicado' }))).toEqual({})
+    expect(getFieldErrors(new Error('x'))).toEqual({})
   })
 })

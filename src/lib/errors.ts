@@ -23,7 +23,22 @@ export function getErrorMessage(error: unknown, fallback = 'Algo deu errado. Ten
   return data?.detail ?? fallback
 }
 
+/**
+ * Erros de validação do backend por campo (ex.: { email: 'e-mail inválido', 'store.name': '...' }).
+ * Vazio quando o erro não é uma validação 400.
+ */
+export function getFieldErrors(error: unknown): Record<string, string> {
+  if (axios.isAxiosError<ProblemDetail>(error) && error.response?.status === 400) {
+    return error.response.data?.errors ?? {}
+  }
+  return {}
+}
+
 /** Erros de rede/5xx são transitórios; 4xx indica problema na requisição. */
 export function isNotFound(error: unknown): boolean {
   return axios.isAxiosError(error) && error.response?.status === 404
+}
+
+export function httpStatus(error: unknown): number | undefined {
+  return axios.isAxiosError(error) ? error.response?.status : undefined
 }
