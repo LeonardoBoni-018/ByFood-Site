@@ -1,4 +1,4 @@
-import { UtensilsCrossed, Pizza, Beef, CupSoda, IceCreamCone } from 'lucide-react'
+import { useLayoutEffect, useRef, useState } from 'react'
 
 interface CategoryTabsProps {
   categories: readonly string[]
@@ -6,35 +6,44 @@ interface CategoryTabsProps {
   onSelect: (category: string) => void
 }
 
-const icons: Record<string, React.ReactNode> = {
-  'Todos': <UtensilsCrossed size={14} />,
-  'Pizzas': <Pizza size={14} />,
-  'Burgers': <Beef size={14} />,
-  'Bebidas': <CupSoda size={14} />,
-  'Sobremesas': <IceCreamCone size={14} />,
-}
-
 export function CategoryTabs({ categories, active, onSelect }: CategoryTabsProps) {
+  const listRef = useRef<HTMLDivElement>(null)
+  const [bar, setBar] = useState({ left: 0, width: 0 })
+
+  useLayoutEffect(() => {
+    const el = listRef.current?.querySelector<HTMLElement>(`[data-cat="${active}"]`)
+    if (el) {
+      setBar({ left: el.offsetLeft, width: el.offsetWidth })
+    }
+  }, [active, categories])
+
   return (
-    <div className="sticky top-[52px] z-30 bg-gray-50/80 dark:bg-[#0F172A]/80 backdrop-blur-lg border-b border-gray-200/60 dark:border-gray-800/60">
-      <div className="flex gap-2 overflow-x-auto px-4 sm:px-6 py-3 scrollbar-hide">
-        {categories.map((cat) => {
-          const isActive = active === cat
-          return (
-            <button
-              key={cat}
-              onClick={() => onSelect(cat)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-200 ${
-                isActive
-                  ? 'bg-primary text-white shadow-sm'
-                  : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
-              }`}
-            >
-              {icons[cat]}
-              {cat}
-            </button>
-          )
-        })}
+    <div className="sticky top-16 z-30 bg-background border-b border-gray-200 dark:border-gray-800">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
+        <div ref={listRef} role="tablist" className="relative flex gap-7 overflow-x-auto scrollbar-hide">
+          {categories.map((cat) => {
+            const isActive = active === cat
+            return (
+              <button
+                key={cat}
+                role="tab"
+                aria-selected={isActive}
+                data-cat={cat}
+                onClick={() => onSelect(cat)}
+                className={`py-4 text-[15px] whitespace-nowrap transition-colors duration-200 ${
+                  isActive ? 'font-semibold text-dark' : 'text-gray-500 hover:text-dark'
+                }`}
+              >
+                {cat}
+              </button>
+            )
+          })}
+          <span
+            aria-hidden
+            className="absolute bottom-0 h-[3px] rounded-t-full bg-primary transition-[left,width] duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]"
+            style={{ left: bar.left, width: bar.width }}
+          />
+        </div>
       </div>
     </div>
   )

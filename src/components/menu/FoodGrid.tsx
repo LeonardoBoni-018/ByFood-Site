@@ -12,7 +12,7 @@ export function FoodGrid({ items }: FoodGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 px-4 sm:px-6 py-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-7 gap-y-10">
       {items.map((item, index) => (
         <FoodCard key={item.id} item={item} index={index} />
       ))}

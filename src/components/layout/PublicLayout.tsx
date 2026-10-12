@@ -8,13 +8,15 @@ export function PublicLayout() {
   const fetchRestaurant = useRestaurantStore((s) => s.fetchRestaurant)
 
   useEffect(() => {
-    fetchRestaurant()
+    fetchRestaurant().catch(() => {
+      // o restante da página funciona com os textos padrão
+    })
   }, [fetchRestaurant])
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0F172A]">
+    <div className="min-h-screen bg-background">
       <TopBar />
-      <main className="pb-20 md:pb-4">
+      <main className="pb-24 md:pb-8">
         <Outlet />
       </main>
       <BottomNav />
