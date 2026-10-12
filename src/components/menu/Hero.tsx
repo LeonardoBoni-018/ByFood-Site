@@ -17,24 +17,33 @@ function Word({ children, delay }: { children: string; delay: number }) {
 
 export function Hero({ restaurant, featured }: HeroProps) {
   const digits = restaurant?.whatsappNumber?.replace(/\D/g, '') ?? ''
+  const nameWords = (restaurant?.name ?? 'Nossa loja').trim().split(/\s+/)
 
   return (
     <section className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-8 pb-12 md:pt-14 md:pb-20 grid md:grid-cols-[1.15fr_1fr] gap-12 md:gap-6 items-center">
       <div>
         <p className="anim-fade-in text-xs font-semibold tracking-[0.18em] uppercase text-primary mb-5">
-          {restaurant?.name ?? 'Bistrô byFood'} · {restaurant?.openingHours ?? 'todos os dias'}
+          {restaurant?.cuisine ?? 'Cardápio'} · {restaurant?.openingHours ?? 'todos os dias'}
         </p>
 
-        <h1 className="font-display text-[44px] sm:text-6xl lg:text-[72px] leading-[1.02] font-semibold text-dark">
-          <Word delay={80}>Comida</Word>
-          <Word delay={160}>de</Word>
-          <Word delay={240}>casa,</Word>
+        <h1
+          className={`font-display leading-[1.02] font-semibold text-dark break-words ${
+            nameWords.join(' ').length > 22
+              ? 'text-[36px] sm:text-5xl lg:text-[56px]'
+              : 'text-[44px] sm:text-6xl lg:text-[72px]'
+          }`}
+        >
+          {nameWords.map((word, i) => (
+            <Word key={`${word}-${i}`} delay={80 + i * 80}>
+              {word}
+            </Word>
+          ))}
           <br />
           <span className="relative inline-block">
             <span className="italic font-normal">
-              <Word delay={360}>feita</Word>
-              <Word delay={440}>na</Word>
-              <Word delay={520}>hora.</Word>
+              <Word delay={80 + nameWords.length * 80}>cardápio</Word>
+              <Word delay={160 + nameWords.length * 80}>da</Word>
+              <Word delay={240 + nameWords.length * 80}>casa.</Word>
             </span>
             <svg
               className="absolute left-0 -bottom-2 w-full h-3 text-mustard"
@@ -55,8 +64,8 @@ export function Hero({ restaurant, featured }: HeroProps) {
         </h1>
 
         <p className="anim-fade-up delay-6 mt-7 max-w-md text-gray-600 dark:text-gray-400 leading-relaxed">
-          {restaurant?.description ??
-            'Escolha no cardápio, monte a sacola e feche o pedido direto pelo WhatsApp. Sem cadastro, sem taxa escondida.'}
+          {restaurant?.description ||
+            'Escolha no cardápio, monte a sacola e feche o pedido direto pelo WhatsApp.'}
         </p>
 
         <div className="anim-fade-up delay-7 mt-8 flex flex-wrap items-center gap-3">

@@ -11,6 +11,7 @@ export function CartSidebar() {
   const total = useCartStore((s) => s.total)
   const itemCount = useCartStore((s) => s.itemCount)
   const clearCart = useCartStore((s) => s.clearCart)
+  const storeName = useCartStore((s) => s.store?.name)
 
   return (
     <aside
@@ -18,7 +19,10 @@ export function CartSidebar() {
       className="hidden lg:flex flex-col sticky top-36 max-h-[calc(100vh-10rem)] rounded-[22px] bg-surface border border-gray-200 dark:border-gray-800 overflow-hidden"
     >
       <div className="px-6 pt-6 pb-4 flex items-baseline justify-between">
-        <h2 className="font-display text-2xl font-semibold text-dark">Sua sacola</h2>
+        <div className="min-w-0">
+          <h2 className="font-display text-2xl font-semibold text-dark">Sua sacola</h2>
+          {storeName && <p className="text-sm text-gray-500 truncate">{storeName}</p>}
+        </div>
         <span className="text-sm text-gray-500 tabular-nums">
           {itemCount()} {itemCount() === 1 ? 'item' : 'itens'}
         </span>

@@ -18,7 +18,7 @@ export function OrderConfirmedPage() {
       <div className="mb-6">
         <CheckCircle size={80} className="text-success mx-auto mb-4" />
         <h1 className="text-2xl font-bold text-dark mb-1">Pedido Confirmado!</h1>
-        <p className="text-gray-500">Seu pedido foi recebido com sucesso.</p>
+        <p className="text-gray-500">Seu pedido foi enviado para {order.restaurantName}.</p>
       </div>
 
       <div className="bg-surface rounded-2xl p-4 mb-4 text-left">

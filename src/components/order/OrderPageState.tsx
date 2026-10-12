@@ -12,12 +12,21 @@ export function OrderLoading() {
   )
 }
 
-export function OrderUnavailable({ notFound, error, onRetry }: { notFound: boolean; error: string | null; onRetry: () => void }) {
+interface OrderUnavailableProps {
+  notFound: boolean
+  error: string | null
+  onRetry: () => void
+  /** O que não foi encontrado, para a mensagem (ex.: "Pedido", "Loja"). */
+  subject?: string
+}
+
+export function OrderUnavailable({ notFound, error, onRetry, subject = 'Pedido' }: OrderUnavailableProps) {
   if (notFound) {
     return (
-      <div className="px-4 py-8 text-center">
-        <p className="text-gray-500 mb-4">Pedido não encontrado</p>
-        <Link to="/" className="text-primary font-semibold">Voltar ao cardápio</Link>
+      <div className="px-4 py-16 text-center">
+        <p className="font-display text-2xl text-dark mb-2">{subject} não encontrado</p>
+        <p className="text-gray-500 mb-6">O endereço pode estar incorreto ou a página foi removida.</p>
+        <Link to="/" className="text-primary font-semibold">Ver lojas</Link>
       </div>
     )
   }

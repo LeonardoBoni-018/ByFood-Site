@@ -1,27 +1,50 @@
 import { Plus, Check } from 'lucide-react'
+import { toast } from 'sonner'
 import type { MenuItem } from '../../types'
 import { useRef, useState } from 'react'
-import { useCartStore } from '../../stores/cartStore'
+import { useCartStore, type CartStore } from '../../stores/cartStore'
 import { formatPrice } from '../../lib/formatters'
 
 interface FoodCardProps {
   item: MenuItem
+  store: CartStore
   index?: number
 }
 
-export function FoodCard({ item, index = 0 }: FoodCardProps) {
+export function FoodCard({ item, store, index = 0 }: FoodCardProps) {
   const addItem = useCartStore((s) => s.addItem)
-  const inCart = useCartStore((s) => s.items.find((i) => i.menuItem.id === item.id)?.quantity ?? 0)
+  const replaceWith = useCartStore((s) => s.replaceWith)
+  const cartStoreName = useCartStore((s) => s.store?.name)
+  const inCart = useCartStore((s) =>
+    s.store?.slug === store.slug ? (s.items.find((i) => i.menuItem.id === item.id)?.quantity ?? 0) : 0,
+  )
   const [added, setAdded] = useState(false)
   const [imgOk, setImgOk] = useState(false)
   const [imgErr, setImgErr] = useState(false)
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
-  const handleAdd = () => {
-    addItem(item, 1)
+  const flashAdded = () => {
     setAdded(true)
     clearTimeout(timer.current)
     timer.current = setTimeout(() => setAdded(false), 1100)
+  }
+
+  const handleAdd = () => {
+    if (addItem(item, store, 1)) {
+      flashAdded()
+      return
+    }
+    // O carrinho é de uma loja só: pergunta antes de descartar os itens da outra
+    toast(`Sua sacola tem itens de ${cartStoreName}.`, {
+      description: `Deseja começar uma nova sacola em ${store.name}?`,
+      action: {
+        label: 'Trocar',
+        onClick: () => {
+          replaceWith(item, store)
+          flashAdded()
+        },
+      },
+    })
   }
 
   return (

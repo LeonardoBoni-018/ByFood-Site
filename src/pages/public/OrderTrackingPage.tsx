@@ -17,7 +17,9 @@ export function OrderTrackingPage() {
     <div className="px-4 py-8 max-w-lg mx-auto text-center">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-dark mb-1">Acompanhe seu Pedido</h1>
-        <p className="text-gray-500">Atualização automática a cada 5s</p>
+        <p className="text-gray-500">
+          {order.restaurantName} · atualização automática a cada 5s
+        </p>
       </div>
 
       <div className="bg-surface rounded-2xl p-4 mb-4 text-left">

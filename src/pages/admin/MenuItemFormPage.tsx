@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { MenuItemForm } from '../../components/admin/MenuItemForm'
-import { fetchAdminMenu } from '../../api/menu'
+import { fetchStoreMenu } from '../../api/menu'
 import type { MenuItem } from '../../types'
+import { Skeleton } from '../../components/ui/Skeleton'
 
 export function MenuItemFormPage() {
   const { id } = useParams<{ id: string }>()
@@ -12,18 +13,23 @@ export function MenuItemFormPage() {
 
   useEffect(() => {
     if (!id) return
-    fetchAdminMenu(0, 200).then((p) => {
-      const found = p.content.find((i) => String(i.id) === id)
-      if (found) setInitial(found)
-    }).finally(() => setLoading(false))
-  }, [id])
+    // a API já devolve só itens da própria loja; item de outra loja nunca aparece aqui
+    fetchStoreMenu(0, 100)
+      .then((p) => {
+        const found = p.content.find((i) => String(i.id) === id)
+        if (found) setInitial(found)
+        else navigate('/loja/cardapio', { replace: true })
+      })
+      .catch(() => navigate('/loja/cardapio', { replace: true }))
+      .finally(() => setLoading(false))
+  }, [id, navigate])
 
   return (
     <div>
       {loading ? (
-        <div className="text-center py-8">Carregando...</div>
+        <Skeleton className="h-96 w-full max-w-lg mx-auto rounded-2xl" />
       ) : (
-        <MenuItemForm initial={initial} onSaved={() => navigate('/admin/menu')} />
+        <MenuItemForm initial={initial} onSaved={() => navigate('/loja/cardapio')} />
       )}
     </div>
   )

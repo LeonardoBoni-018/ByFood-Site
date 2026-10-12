@@ -1,24 +1,36 @@
-import type { OrderStatus } from '../../types'
+import type { Order, OrderStatus } from '../../types'
+import { ORDER_STATUS_LABELS } from '../../lib/constants'
 
 interface OrderFilterTabsProps {
   active: OrderStatus | 'ALL'
   onChange: (s: OrderStatus | 'ALL') => void
+  orders: Order[]
 }
 
-export function OrderFilterTabs({ active, onChange }: OrderFilterTabsProps) {
-  const tabs: (OrderStatus | 'ALL')[] = ['ALL', 'RECEIVED', 'PREPARING', 'READY', 'DELIVERED']
+const TABS: (OrderStatus | 'ALL')[] = ['ALL', 'RECEIVED', 'PREPARING', 'READY', 'DELIVERED', 'CANCELLED']
 
+export function OrderFilterTabs({ active, onChange, orders }: OrderFilterTabsProps) {
   return (
-    <div className="flex gap-2 mb-4">
-      {tabs.map((t) => (
-        <button
-          key={String(t)}
-          onClick={() => onChange(t)}
-          className={`px-3 py-2 rounded-xl text-sm font-semibold ${active === t ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600'}`}
-        >
-          {t === 'ALL' ? 'Todos' : t}
-        </button>
-      ))}
+    <div className="flex gap-2 mb-5 overflow-x-auto scrollbar-hide -mx-1 px-1">
+      {TABS.map((t) => {
+        const count = t === 'ALL' ? orders.length : orders.filter((o) => o.status === t).length
+        const isActive = active === t
+        return (
+          <button
+            key={t}
+            onClick={() => onChange(t)}
+            aria-pressed={isActive}
+            className={`shrink-0 h-10 px-4 rounded-full text-sm font-medium transition-colors ${
+              isActive
+                ? 'bg-dark text-background'
+                : 'border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-dark'
+            }`}
+          >
+            {t === 'ALL' ? 'Todos' : ORDER_STATUS_LABELS[t]}
+            <span className="ml-1.5 tabular-nums opacity-60">{count}</span>
+          </button>
+        )
+      })}
     </div>
   )
 }

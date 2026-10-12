@@ -1,15 +1,21 @@
-import { Home, ShoppingBag, ClipboardList } from 'lucide-react'
+import { Home, ShoppingBag, ClipboardList, LogIn, LayoutDashboard } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { useCartStore } from '../../stores/cartStore'
-
-const items = [
-  { to: '/', icon: Home, label: 'Cardápio', end: true },
-  { to: '/cart', icon: ShoppingBag, label: 'Sacola', end: false },
-  { to: '/orders', icon: ClipboardList, label: 'Pedidos', end: false },
-]
+import { useAuthStore } from '../../stores/authStore'
 
 export function BottomNav() {
   const count = useCartStore((s) => s.itemCount())
+  const user = useAuthStore((s) => s.user)
+
+  const items = [
+    { to: '/', icon: Home, label: 'Lojas', end: true },
+    { to: '/cart', icon: ShoppingBag, label: 'Sacola', end: false },
+    user?.role === 'STORE'
+      ? { to: '/loja/pedidos', icon: LayoutDashboard, label: 'Painel', end: false }
+      : user
+        ? { to: '/pedidos', icon: ClipboardList, label: 'Pedidos', end: false }
+        : { to: '/entrar', icon: LogIn, label: 'Entrar', end: false },
+  ]
 
   return (
     <nav className="fixed bottom-0 inset-x-0 z-50 md:hidden bg-surface border-t border-gray-200 dark:border-gray-800 pb-[env(safe-area-inset-bottom)]">
