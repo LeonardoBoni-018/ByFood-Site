@@ -2,6 +2,8 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ThemeProvider } from './contexts/ThemeContext'
 import '@fontsource-variable/inter'
+import '@fontsource-variable/fraunces'
+import '@fontsource-variable/fraunces/wght-italic.css'
 import './index.css'
 import App from './App.tsx'
 

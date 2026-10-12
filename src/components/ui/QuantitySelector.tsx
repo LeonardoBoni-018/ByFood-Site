@@ -8,40 +8,27 @@ interface QuantitySelectorProps {
 }
 
 export function QuantitySelector({ value, onChange, min = 1, compact = false }: QuantitySelectorProps) {
-  if (compact) {
-    return (
-      <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg px-1 py-0.5">
-        <button
-          onClick={() => onChange(Math.max(min, value - 1))}
-          className="w-6 h-6 rounded-md bg-white dark:bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors active:scale-90 shadow-sm"
-        >
-          <Minus size={12} />
-        </button>
-        <span className="w-5 text-center font-semibold text-xs text-gray-900 dark:text-white">{value}</span>
-        <button
-          onClick={() => onChange(value + 1)}
-          className="w-6 h-6 rounded-md bg-primary text-white flex items-center justify-center hover:bg-primary-hover transition-colors active:scale-90"
-        >
-          <Plus size={12} />
-        </button>
-      </div>
-    )
-  }
+  const btn = compact ? 'w-7 h-7' : 'w-9 h-9'
+  const icon = compact ? 13 : 15
 
   return (
-    <div className="flex items-center gap-1.5 bg-gray-100 dark:bg-gray-800 rounded-xl px-1.5 py-1">
+    <div className="inline-flex items-center rounded-full border border-gray-300 dark:border-gray-700 bg-surface">
       <button
         onClick={() => onChange(Math.max(min, value - 1))}
-        className="w-8 h-8 rounded-lg bg-white dark:bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors active:scale-90 shadow-sm"
+        aria-label="Diminuir quantidade"
+        className={`${btn} rounded-full flex items-center justify-center text-gray-600 hover:text-primary transition-colors active:scale-90`}
       >
-        <Minus size={14} />
+        <Minus size={icon} />
       </button>
-      <span className="w-6 text-center font-semibold text-sm text-gray-900 dark:text-white">{value}</span>
+      <span key={value} className="anim-pop min-w-5 text-center font-semibold text-sm tabular-nums text-dark">
+        {value}
+      </span>
       <button
         onClick={() => onChange(value + 1)}
-        className="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center hover:bg-primary-hover transition-colors active:scale-90"
+        aria-label="Aumentar quantidade"
+        className={`${btn} rounded-full flex items-center justify-center text-gray-600 hover:text-primary transition-colors active:scale-90`}
       >
-        <Plus size={14} />
+        <Plus size={icon} />
       </button>
     </div>
   )

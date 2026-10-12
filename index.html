@@ -4,10 +4,13 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bistrô byFood</title>
+    <meta name="theme-color" content="#f5efe3" />
+    <meta name="description" content="Bistrô byFood: veja o cardápio, monte a sacola e feche o pedido pelo WhatsApp." />
+    <title>byFood · Bistrô</title>
     <script>
       (function() {
-        var t = localStorage.getItem('byfood-theme');
+        var t = null;
+        try { t = localStorage.getItem('byfood-theme'); } catch (e) {}
         if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
           document.documentElement.classList.remove('light');
           document.documentElement.classList.add('dark');
