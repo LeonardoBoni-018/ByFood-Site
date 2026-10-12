@@ -17,7 +17,7 @@ export function readToken(): string | null {
 
 const client = axios.create({
   baseURL,
-  timeout: 20000, // o Render free pode levar alguns segundos para "acordar"
+  timeout: 60000, // o Render free leva ~30-60s para "acordar" após inatividade
   headers: { 'Content-Type': 'application/json' },
 })
 
