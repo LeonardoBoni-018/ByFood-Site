@@ -5,6 +5,7 @@ import { Toaster } from 'sonner'
 import { PublicLayout } from './components/layout/PublicLayout'
 import { HomePage } from './pages/public/HomePage'
 import { ErrorBoundary } from './components/ErrorBoundary'
+import { ServerWakingBanner } from './components/ServerWakingBanner'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { Skeleton } from './components/ui/Skeleton'
 import { useAuthStore } from './stores/authStore'
@@ -78,6 +79,7 @@ function App() {
           </Routes>
         </Suspense>
       </BrowserRouter>
+      <ServerWakingBanner />
       <Toaster position="top-center" richColors closeButton />
     </ErrorBoundary>
   )

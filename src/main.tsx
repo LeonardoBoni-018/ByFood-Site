@@ -6,6 +6,10 @@ import '@fontsource-variable/fraunces'
 import '@fontsource-variable/fraunces/wght-italic.css'
 import './index.css'
 import App from './App.tsx'
+import { wakeServer } from './api/client'
+
+// Acorda a API (Render free hiberna) em paralelo com o carregamento da página
+wakeServer()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
